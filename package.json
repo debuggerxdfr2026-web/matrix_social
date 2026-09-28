@@ -1,0 +1,20 @@
+{
+  "name": "matrix-social",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Matrix-themed realtime social platform with DMs, groups, WebRTC calls, Instants, statuses and CRAI.",
+  "type": "module",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}

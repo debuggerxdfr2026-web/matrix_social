@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="MATRIX SOCIAL — realtime social network">
+  <title>MATRIX SOCIAL</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <canvas id="matrixCanvas" aria-hidden="true"></canvas>
+
+  <div id="loginOverlay" class="overlay">
+    <form id="loginForm" class="login-card">
+      <div class="glitch" data-text="MATRIX//SOCIAL">MATRIX//SOCIAL</div>
+      <p class="terminal-line">> establish secure identity_</p>
+      <label for="username">HANDLE</label>
+      <input id="username" name="username" maxlength="24" autocomplete="nickname" required placeholder="operator_01">
+      <button class="primary" type="submit">ENTER THE GRID</button>
+      <small>Demo identity only — no password required.</small>
+    </form>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <header class="topbar">
+    <button class="brand" data-view="feed">MATRIX<span>_</span>SOCIAL</button>
+    <div class="top-actions">
+      <span id="connectionState" class="connection"><i></i> OFFLINE</span>
+      <button id="themeToggle" class="icon-btn" title="Toggle theme">☼</button>
+      <button id="profileBtn" class="avatar">?</button>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <nav class="nav">
+        <button class="nav-item active" data-view="feed"><span>⌂</span> FEED</button>
+        <button class="nav-item" data-view="messages"><span>✉</span> DIRECT</button>
+        <button class="nav-item" data-view="groups"><span>◈</span> GROUPS</button>
+        <button class="nav-item" data-view="instants"><span>◉</span> INSTΛNTS</button>
+        <button class="nav-item" data-view="status"><span>◆</span> STATUS</button>
+      </nav>
+
+      <div class="sidebar-block">
+        <div class="section-label">ONLINE NODES</div>
+        <div id="onlineUsers" class="online-users"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>SYS v1.0</span>
+        <span id="clock"></span>
+      </div>
+    </aside>
+
+    <main id="mainContent" class="main-content">
+      <section id="feedView" class="view active">
+        <div class="hero-panel">
+          <div>
+            <span class="eyebrow">NETWORK // ACTIVE</span>
+            <h1>YOUR DIGITAL<br><span>FRONTIER.</span></h1>
+            <p>Connect. Broadcast. Collaborate. Stay inside the grid.</p>
+          </div>
+          <div class="hero-orb"><span>●</span></div>
+        </div>
+
+        <div class="composer card">
+          <div class="composer-head"><span id="composerUser">operator</span><span>PUBLIC STATUS</span></div>
+          <textarea id="statusInput" maxlength="280" placeholder="Transmit a status update..."></textarea>
+          <div class="composer-actions">
+            <span id="statusCounter">0 / 280</span>
+            <button id="postStatus" class="primary">TRANSMIT</button>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <h2>LIVE SIGNALS</h2><span id="statusCount">0</span>
+        </div>
+        <div id="feedList" class="feed-list"></div>
+      </section>
+
+      <section id="messagesView" class="view">
+        <div class="page-title"><div><span class="eyebrow">PRIVATE CHANNEL</span><h2>DIRECT MESSAGES</h2></div></div>
+        <div class="dm-layout card">
+          <aside class="dm-users" id="dmUsers"></aside>
+          <section class="chat-panel">
+            <div class="chat-header">
+              <div><strong id="chatTitle">SELECT A NODE</strong><small id="chatPresence">Choose a user to begin.</small></div>
+              <div class="call-actions">
+                <button id="voiceCall" class="outline">VOICE</button>
+                <button id="videoCall" class="primary">VIDEO</button>
+              </div>
+            </div>
+            <div id="dmMessages" class="messages"></div>
+            <form id="dmForm" class="message-form">
+              <input id="dmInput" maxlength="1000" placeholder="Write encrypted-looking text..." autocomplete="off">
+              <button class="primary">SEND ↗</button>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section id="groupsView" class="view">
+        <div class="page-title">
+          <div><span class="eyebrow">COLLECTIVE CHANNELS</span><h2>GROUPS</h2></div>
+          <button id="newGroupBtn" class="primary">+ NEW GROUP</button>
+        </div>
+        <div id="groupGrid" class="group-grid"></div>
+        <div id="groupChat" class="group-chat card hidden">
+          <div class="chat-header">
+            <div><strong id="groupChatTitle">GROUP</strong><small id="groupChatMeta"></small></div>
+            <button id="leaveGroupBtn" class="outline">CLOSE</button>
+          </div>
+          <div id="groupMessages" class="messages"></div>
+          <form id="groupForm" class="message-form">
+            <input id="groupInput" maxlength="1000" placeholder="Broadcast to group..." autocomplete="off">
+            <button class="primary">SEND ↗</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="instantsView" class="view">
+        <div class="page-title">
+          <div><span class="eyebrow">24H EPHEMERAL FEED</span><h2>INSTΛNTS</h2></div>
+          <button id="newInstantBtn" class="primary">+ NEW INSTANT</button>
+        </div>
+        <div id="instantGrid" class="instant-grid"></div>
+      </section>
+
+      <section id="statusView" class="view">
+        <div class="page-title"><div><span class="eyebrow">BROADCAST LAYER</span><h2>STATUS UPDATES</h2></div></div>
+        <div id="statusGrid" class="status-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <section id="craiPanel" class="crai-panel">
+    <button id="craiToggle" class="crai-toggle" aria-label="Open CRAI">CRAI<span>●</span></button>
+    <div class="crai-window">
+      <div class="crai-header">
+        <div><strong>CRAI // ASSISTANT</strong><small>adaptive intelligence node</small></div>
+        <button id="craiClose">×</button>
+      </div>
+      <div id="craiMessages" class="crai-messages">
+        <div class="ai-bubble">CRAI online. How can I assist your session?</div>
+      </div>
+      <div class="crai-tools">
+        <button data-prompt="How do I start a video call?">CALL HELP</button>
+        <button data-prompt="What are Instants?">INSTANTS</button>
+        <button data-prompt="How do groups work?">GROUPS</button>
+      </div>
+      <form id="craiForm">
+        <input id="craiInput" maxlength="4000" placeholder="Ask CRAI..." autocomplete="off">
+        <button aria-label="Send">↵</button>
+      </form>
+    </div>
+  </section>
+
+  <div id="callOverlay" class="call-overlay hidden">
+    <div class="call-card">
+      <div class="call-top"><span id="callMode">VIDEO LINK</span><span id="callTimer">00:00</span></div>
+      <div class="video-stage">
+        <video id="remoteVideo" autoplay playsinline></video>
+        <video id="localVideo" autoplay playsinline muted></video>
+        <div id="voiceFallback" class="voice-fallback hidden">VOICE<br><span>CONNECTED</span></div>
+      </div>
+      <div class="call-info"><strong id="callPeer">NODE</strong><span id="callState">CONNECTING...</span></div>
+      <div class="call-controls">
+        <button id="muteBtn" class="outline">MUTE</button>
+        <button id="cameraBtn" class="outline">CAM</button>
+        <button id="endCallBtn" class="danger">END CALL</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <button id="modalClose" class="modal-close">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
